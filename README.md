@@ -9,4 +9,4 @@ Requirments:
   - constants.py
 
 Goal:
-  Send users text messages that contain game statistics, and messages when winning / losing.
+  Send friends text messages that contain League of Legends game statistics, and messages when winning / losing.
