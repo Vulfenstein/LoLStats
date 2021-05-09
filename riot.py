@@ -14,20 +14,22 @@ my_region = constants.my_region
 # Grab friends account tags
 for x in range(0,1):
     current = getStats('SPECTREz')
-    friendInfo.append(Account(current['id'], current['accountId'], current['puuid'], current['name'], current['summonerLevel']))
+    friendInfo.append(Account(current['id'], current['accountId'], current['puuid'], current['name'], current['summonerLevel'], ''))
 
 # Grab current game stats
 for user in friendInfo:
     try:
         gameStats = getGameStats(user.id)
-        #print(gameStats)
         # Grab enemy account tags
         for player in range(0,10):
             summoner_name = gameStats['participants'][player]['summonerName']
+            champion_id = gameStats['participants'][player]['championId']
+            champion = getChampion(champion_id)
             if summoner_name not in constants.all_users:
                 current = getStats(summoner_name)
-                enemyInfo.append(Account(current['id'], current['accountId'], current['puuid'], current['name'], current['summonerLevel']))
-
+                enemyInfo.append(Account(current['id'], current['accountId'], current['puuid'], current['name'], current['summonerLevel'], champion))
+            else: 
+                friendInfo[player].setChampion(champion)
     except ApiError as err:
         if err.response.status_code == 404:
             print(user.name, " is not playing")
@@ -36,10 +38,8 @@ for user in friendInfo:
             print("Player: ", user.name)
             print("Error code:", err.response.status_code)
 
+
 # Grab champions
 for user in enemyInfo:
-    try:
-        name = getChampion(user.name)
-        print(name)
-    except ApiError as err:
-        print(err)
+    print(user.name)
+    print(user.champion)
